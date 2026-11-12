@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111827">
+  <meta name="description" content="Build your typing speed and accuracy with a focused, customizable typing test.">
+  <title>KeySprint — Typing Speed Test</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="test">
+  <nav class="site-nav" aria-label="Main navigation">
+    <a class="brand" href="index.html" aria-label="KeySprint home"><span class="brand-mark" aria-hidden="true">⌁</span>KeySprint</a>
+    <div class="nav-links">
+      <a class="nav-link active" href="index.html" aria-current="page">Test</a>
+      <a class="nav-link" href="progress.html">Progress</a>
+    </div>
+    <div class="nav-tools">
+      <label class="sr-only" for="theme-select">Color theme</label>
+      <select id="theme-select" class="theme-select" aria-label="Choose a color theme">
+        <option value="midnight">Midnight</option>
+        <option value="ocean">Ocean</option>
+        <option value="forest">Forest</option>
+        <option value="sunset">Sunset</option>
+        <option value="minimal">Minimal Light</option>
+      </select>
+      <button class="icon-button" id="theme-toggle" type="button" aria-label="Toggle light and dark mode" title="Toggle light and dark mode"><span aria-hidden="true">◐</span></button>
+    </div>
+  </nav>
+
+  <main class="page-shell">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="eyebrow-dot"></span> A little practice, a lot of progress</p>
+        <h1 id="hero-title" class="hero-title">Find your <span class="gradient-text">flow state.</span></h1>
+        <p class="hero-subtitle">A calmer way to get faster. Take a quick test, track your rhythm, and watch your confidence grow.</p>
+      </div>
+      <div class="hero-decoration" aria-hidden="true">
+        <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+        <div class="hero-key key-one">A</div><div class="hero-key key-two">S</div><div class="hero-key key-three">⌘</div>
+        <div class="hero-spark">✦</div>
+      </div>
+    </section>
+
+    <section class="test-layout" aria-label="Typing test">
+      <aside class="control-card glass-card" aria-label="Test settings">
+        <div class="card-heading">
+          <div><p class="eyebrow">YOUR SESSION</p><h2>Test setup</h2></div>
+          <span class="setup-icon" aria-hidden="true">⚙</span>
+        </div>
+        <fieldset class="control-group">
+          <legend>Duration</legend>
+          <div class="segmented-control" id="duration-options" role="group" aria-label="Test duration">
+            <button type="button" class="segment" data-duration="15">15s</button>
+            <button type="button" class="segment selected" data-duration="30">30s</button>
+            <button type="button" class="segment" data-duration="60">60s</button>
+            <button type="button" class="segment" data-duration="120">120s</button>
+          </div>
+        </fieldset>
+        <div class="control-group">
+          <label for="difficulty-select">Difficulty</label>
+          <select id="difficulty-select" class="form-select">
+            <option value="easy">Easy · Everyday words</option>
+            <option value="medium" selected>Medium · Punctuation</option>
+            <option value="hard">Hard · Numbers & symbols</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label for="custom-text">Custom text <span class="label-optional">optional</span></label>
+          <textarea id="custom-text" class="custom-text" rows="3" maxlength="5000" placeholder="Paste or type your own practice text..."></textarea>
+          <span class="field-hint">Using custom text overrides difficulty.</span>
+        </div>
+        <div class="settings-row">
+          <label class="switch-label" for="sound-toggle"><span>Key sounds</span><input id="sound-toggle" type="checkbox" role="switch"><span class="switch" aria-hidden="true"></span></label>
+          <label class="switch-label" for="keyboard-toggle"><span>Keyboard</span><input id="keyboard-toggle" type="checkbox" role="switch" checked><span class="switch" aria-hidden="true"></span></label>
+        </div>
+        <button class="button button-primary start-button" id="start-button" type="button"><span>Start test</span><span aria-hidden="true">→</span></button>
+        <p class="shortcut-hint"><kbd>Tab</kbd> + <kbd>Enter</kbd> to restart</p>
+      </aside>
+
+      <div class="test-main">
+        <div class="stats-strip glass-card" aria-label="Live test statistics">
+          <div class="stat-item"><span class="stat-label">WPM</span><strong id="live-wpm" class="stat-value">0</strong><span class="stat-caption">words / min</span></div>
+          <div class="stat-item"><span class="stat-label">RAW WPM</span><strong id="live-raw-wpm" class="stat-value">0</strong><span class="stat-caption">all keystrokes</span></div>
+          <div class="stat-item"><span class="stat-label">ACCURACY</span><strong id="live-accuracy" class="stat-value">100<span class="stat-unit">%</span></strong><span class="stat-caption">keystroke precision</span></div>
+          <div class="stat-item"><span class="stat-label">ERRORS</span><strong id="live-errors" class="stat-value">0</strong><span class="stat-caption">incorrect keys</span></div>
+          <div class="stat-item timer-stat"><span class="stat-label">TIME LEFT</span><strong id="live-time" class="stat-value">30<span class="stat-unit">s</span></strong><span class="stat-caption">starts on first key</span></div>
+        </div>
+
+        <section class="typing-card glass-card" aria-label="Typing passage">
+          <div class="typing-toolbar">
+            <span class="typing-status"><span class="status-dot" id="status-dot"></span><span id="test-status">Ready when you are</span></span>
+            <span class="passage-label" id="passage-label">MEDIUM · SENTENCES</span>
+          </div>
+          <div id="typing-area" class="typing-area" tabindex="0" role="textbox" aria-label="Typing test passage. Type the highlighted text." aria-multiline="true" aria-describedby="typing-help">
+            <div id="passage" class="passage" aria-hidden="true"></div>
+            <textarea id="mobile-input" class="mobile-input" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Type the passage here" placeholder="Tap here to start typing"></textarea>
+          </div>
+          <p id="typing-help" class="typing-help">Click the passage and start typing. Your timer begins with your first keystroke.</p>
+          <div class="typing-footer">
+            <span><span class="key-hint" aria-hidden="true">↵</span> <span id="progress-label">0 / 0 characters</span></span>
+            <button class="text-button" id="restart-button" type="button" aria-label="Restart test"><span aria-hidden="true">↻</span> Restart <kbd>Tab</kbd> + <kbd>Enter</kbd></button>
+          </div>
+        </section>
+
+        <section id="keyboard-visualizer" class="keyboard-visualizer glass-card" aria-label="On-screen keyboard visualizer">
+          <div class="keyboard-row">
+            <span class="keyboard-key" data-key="1">1</span><span class="keyboard-key" data-key="2">2</span><span class="keyboard-key" data-key="3">3</span><span class="keyboard-key" data-key="4">4</span><span class="keyboard-key" data-key="5">5</span><span class="keyboard-key" data-key="6">6</span><span class="keyboard-key" data-key="7">7</span><span class="keyboard-key" data-key="8">8</span><span class="keyboard-key" data-key="9">9</span><span class="keyboard-key" data-key="0">0</span>
+          </div>
+          <div class="keyboard-row">
+            <span class="keyboard-key" data-key="q">Q</span><span class="keyboard-key" data-key="w">W</span><span class="keyboard-key" data-key="e">E</span><span class="keyboard-key" data-key="r">R</span><span class="keyboard-key" data-key="t">T</span><span class="keyboard-key" data-key="y">Y</span><span class="keyboard-key" data-key="u">U</span><span class="keyboard-key" data-key="i">I</span><span class="keyboard-key" data-key="o">O</span><span class="keyboard-key" data-key="p">P</span>
+          </div>
+          <div class="keyboard-row keyboard-row-inset">
+            <span class="keyboard-key" data-key="a">A</span><span class="keyboard-key" data-key="s">S</span><span class="keyboard-key" data-key="d">D</span><span class="keyboard-key" data-key="f">F</span><span class="keyboard-key" data-key="g">G</span><span class="keyboard-key" data-key="h">H</span><span class="keyboard-key" data-key="j">J</span><span class="keyboard-key" data-key="k">K</span><span class="keyboard-key" data-key="l">L</span>
+          </div>
+          <div class="keyboard-row keyboard-row-inset">
+            <span class="keyboard-key" data-key="shift">⇧</span><span class="keyboard-key" data-key="z">Z</span><span class="keyboard-key" data-key="x">X</span><span class="keyboard-key" data-key="c">C</span><span class="keyboard-key" data-key="v">V</span><span class="keyboard-key" data-key="b">B</span><span class="keyboard-key" data-key="n">N</span><span class="keyboard-key" data-key="m">M</span><span class="keyboard-key" data-key="enter">↵</span>
+          </div>
+          <div class="keyboard-row"><span class="keyboard-key keyboard-space" data-key=" ">space</span></div>
+        </section>
+      </div>
+    </section>
+
+    <section id="results-panel" class="results-panel glass-card" aria-labelledby="results-title" hidden>
+      <div class="results-heading">
+        <div><p class="eyebrow">SESSION COMPLETE</p><h2 id="results-title">Nice work. Keep the rhythm.</h2><p id="best-badge" class="best-badge" hidden>✦ New personal best!</p></div>
+        <button class="icon-button close-results" id="close-results" type="button" aria-label="Close results">×</button>
+      </div>
+      <div class="results-grid">
+        <div class="result-primary"><span class="stat-label">FINAL WPM</span><strong id="result-wpm">0</strong><span>words per minute</span></div>
+        <div class="result-cards">
+          <div class="result-card"><span>Accuracy</span><strong id="result-accuracy">0%</strong></div>
+          <div class="result-card"><span>Consistency</span><strong id="result-consistency">0%</strong></div>
+          <div class="result-card"><span>Correct</span><strong id="result-correct">0</strong></div>
+          <div class="result-card"><span>Incorrect</span><strong id="result-incorrect">0</strong></div>
+          <div class="result-card"><span>Missed</span><strong id="result-missed">0</strong></div>
+          <div class="result-card"><span>Raw WPM</span><strong id="result-raw-wpm">0</strong></div>
+        </div>
+      </div>
+      <div class="result-chart-wrap"><h3>Your pace</h3><canvas id="result-chart" aria-label="Words per minute by second"></canvas></div>
+      <div class="results-actions"><button class="button button-primary" id="again-button" type="button">Try again <span aria-hidden="true">→</span></button><a class="button button-secondary" href="progress.html">View progress</a></div>
+      <div id="confetti-layer" class="confetti-layer" aria-hidden="true"></div>
+    </section>
+  </main>
+  <footer class="site-footer"><span>© 2026 KeySprint</span><span>Practice with presence.</span></footer>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
